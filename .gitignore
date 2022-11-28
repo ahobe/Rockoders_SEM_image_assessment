@@ -1,3 +1,8 @@
 Original_submission/model_mlo_512_512_2.h5
 Original_submission/dataset1/BSE/*
-!Original_submission/dataset1/BSE/Readme.txt
+!Original_submission/dataset1/BSE/.Readme.txt
+Original_submission/dataset1/CL/*
+!Original_submission/dataset1/CL/.Readme.txt
+Original_submission/__pycache__/
+Original_submission/dataset1/CL_segmented/*
+!Original_submission/dataset1/CL_segmented/.Readme.txt

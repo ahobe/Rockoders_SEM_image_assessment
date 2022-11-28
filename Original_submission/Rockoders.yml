@@ -9,14 +9,10 @@ dependencies:
   - python=3.10.6
   - scipy==1.9.3
   - pip:
-    - gc
     - numpy==1.23.4
     - opencv-python-headless==4.6.0.66
     - keras
-    - os
-    - glob
-    - itertools
-    - time
+    - tensorflow
     - attrs==22.1.0
     - coverage==6.5.0
     - exceptiongroup==1.0.1

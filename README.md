@@ -9,3 +9,7 @@ SEM image assessment tool produced during the 2022 SPE geothermal hackathon
 - create a package
 
 Check out https://git-lfs.github.com/ for large files.
+
+
+conda env create -f Rockoders.yml
+conda env remove -n Rockoders
