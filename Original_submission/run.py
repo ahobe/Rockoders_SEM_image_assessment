@@ -4,14 +4,12 @@ import glob
 import cv2
 import numpy as np
 from matplotlib import pyplot as plt
-#import albumentations as A
 import itertools
 from itertools import chain
 from os import listdir
 from os.path import isfile, join
 from keras.preprocessing.image import ImageDataGenerator 
 from keras.utils import img_to_array, array_to_img, load_img
-#from skimage.transform import resize
 from unet import build_unet
 import matplotlib as mpl
 import time
@@ -28,7 +26,6 @@ input_shape = (im_h, im_w, im_ch)
 
 model = build_unet(input_shape, n_classes=5);
 model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy']);
-# model.summary()
 
 #Load previously saved model
 from keras.models import load_model
@@ -113,26 +110,20 @@ for folder in x:
     print('Found' , len(onlyfiles_cl), 'files in CL folder:')
     print('Found' , len(onlyfiles_bse), 'files in BSE folder:')
 
-    #print('Loading', no_samples, 'files from the folders..')
-
     im_dummy  = cv2.imread(path_folder_cl + onlyfiles_cl[0] , 0)
 
     #Create 'CL segmented' folder
     directory = 'CL_segmented'
     path = os.path.join(folder, directory) 
-    #os.mkdir(path) 
     deal_with_folder_availability(path)
 
     # CSV array dummy
-    
     dummy_array = np.zeros([len(onlyfiles_cl),5])
     df = pd.DataFrame(data=dummy_array, columns=['path', 'quartz_rel_area', 'overgrowth_rel_area' , 'otherminerals_rel_area', 'pores_rel_area'] )
     
     #Start segmenting images...
     for i in range(no_samples):
-        #print(i)
         check1 = os.path.isfile(path_folder_cl + onlyfiles_cl[i])
-        #X = np.zeros([im_dummy.shape[0], im_dummy.shape[1], 2])
         if check1 == True:
             im_name = onlyfiles_cl[i]
             print('Segmenting', im_name, '..')
@@ -162,9 +153,6 @@ for folder in x:
 
             # Save &/ plot image
             test_argmax=np.argmax(predictions_smooth, axis=2)
-            #plt.imshow(test_argmax, cmap = cmap_segmentation,  vmin= -1, vmax=4)
-            #cv2.applyColorMap(test_argmax, cv2.COLORMAP_MAGMA)
-            #cv2.imwrite(path + '/' + im_name , test_argmax) 
             
             save_image(test_argmax, cmap_segmentation, path + '/' + im_name)
             
