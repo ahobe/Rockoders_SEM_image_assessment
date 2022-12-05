@@ -1,12 +1,11 @@
 import os
 import cv2
 import numpy as np
-from os import listdir
-from os.path import isfile, join
 
 from assesSEM.IO import save_image, get_names_for_image_type_folders, create_image_predictions_folder, \
     initialize_result_csv
-from assesSEM.get_user_input import get_folder_names, get_desired_nr_of_images_per_folder
+from assesSEM.get_user_input import get_folder_names, get_desired_nr_of_images_per_folder, \
+    get_common_image_nrs_from_both_image_types
 from assesSEM.model_manipulation import build_and_load_existing_model
 import time
 
@@ -21,33 +20,22 @@ folder_names = get_folder_names()
 
 nr_of_images_per_folder = get_desired_nr_of_images_per_folder(folder_names)
 
-
-def get_common_image_nrs_from_both_image_types(path_folder_bse, path_folder_cl):
-    onlyfiles_cl = [f for f in listdir(path_folder_cl) if isfile(join(path_folder_cl, f))]
-    onlyfiles_bse = [f for f in listdir(path_folder_bse) if isfile(join(path_folder_bse, f))]
-    print('Found', len(onlyfiles_cl), 'files in CL folder:')
-    print('Found', len(onlyfiles_bse), 'files in BSE folder:')
-    # todo: would be more efficient to check these against each other.
-    # todo: these should be tiffs! not just files!
-    return onlyfiles_cl
-
-
 for iFolder, folder in enumerate(folder_names):
     no_samples = nr_of_images_per_folder[iFolder]
     get_common_image_nrs_from_both_image_types()
     path_folder_bse, path_folder_cl = get_names_for_image_type_folders()
-    onlyfiles_cl = get_common_image_nrs_from_both_image_types(path_folder_bse, path_folder_cl)
+    images_in_both = get_common_image_nrs_from_both_image_types(path_folder_bse, path_folder_cl)
 
     # im_dummy = cv2.imread(path_folder_cl + onlyfiles_cl[0], 0)
 
     predictions_path = create_image_predictions_folder()
 
     # CSV array dummy
-    percentage_table = initialize_result_csv(onlyfiles_cl)
+    percentage_table = initialize_result_csv(images_in_both)
 
     # Start segmenting images...
     for iSample in range(no_samples):
-        im_name = onlyfiles_cl[iSample]
+        im_name = images_in_both[iSample]
         image_path_cl = path_folder_cl + im_name
         image_path_bse = path_folder_bse + im_name
         check1 = os.path.isfile(image_path_cl)

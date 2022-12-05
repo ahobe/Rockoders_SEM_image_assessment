@@ -1,6 +1,8 @@
 import os
 import sys
 import glob
+from os import listdir
+from os.path import isfile, join
 
 
 def get_folder_names():
@@ -79,3 +81,23 @@ def get_desired_nr_of_images_per_folder(names):
 def get_nr_of_images_in_folder(folder_path):
     nr_of_images = len(glob.glob1(folder_path, "*.tif"))
     return nr_of_images
+
+
+def get_names_of_images_in_folder(folder_path):
+    image_names = glob.glob1(folder_path, "*.tif")
+    return image_names
+
+
+def get_common_image_nrs_from_both_image_types(path_folder_bse, path_folder_cl):
+    onlyfiles_cl = get_names_of_images_in_folder(path_folder_cl)
+    onlyfiles_bse = get_names_of_images_in_folder(path_folder_bse)
+    onlyfiles_bse = [f for f in listdir(path_folder_bse) if isfile(join(path_folder_bse, f))]
+    print('Found', len(onlyfiles_cl), 'files in CL folder:')
+    print('Found', len(onlyfiles_bse), 'files in BSE folder:')
+    # todo: would be more efficient to check these against each other.
+    # todo: these should be tiffs! not just files!
+    images_available_in_both = []
+    for file in onlyfiles_cl:
+        if isfile(join(path_folder_bse, file)):
+            images_available_in_both.append(file)
+    return images_available_in_both
