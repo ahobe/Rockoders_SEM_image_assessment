@@ -5,6 +5,7 @@ from os import listdir
 from os.path import isfile, join
 
 from assesSEM.IO import deal_with_folder_availability, save_image
+from assesSEM.get_user_input import get_folder_names
 from assesSEM.model_manipulation import build_and_load_existing_model
 import time
 import pandas as pd
@@ -16,13 +17,13 @@ model, nb_classes = build_and_load_existing_model(name="model_mlo_512_512_2.h5")
 
 cmap_segmentation = get_cmap()
 
-x = ['dataset1', 'dataset2', 'dataset3', 'dataset4']
+folder_names = get_folder_names()
 
 value = input("Please enter # of images loaded per dataset folder:\n")
 print(f'You entered {value}')
 no_samples = int(value)
 
-for folder in x:
+for folder in folder_names:
 
     print('Opening folder', folder, '..')
     path_folder_cl = folder + '/CL/'
