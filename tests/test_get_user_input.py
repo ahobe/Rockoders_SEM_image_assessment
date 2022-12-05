@@ -52,6 +52,5 @@ def test_get_folder_names_raises():
     assert e.type == ValueError
 
 
-
 if __name__ == '__main__':
     unittest.main()

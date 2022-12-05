@@ -5,7 +5,7 @@ from os import listdir
 from os.path import isfile, join
 
 from assesSEM.IO import save_image
-from assesSEM.get_user_input import get_folder_names, deal_with_folder_availability
+from assesSEM.get_user_input import get_folder_names, deal_with_folder_availability, get_desired_nr_of_images_per_folder
 from assesSEM.model_manipulation import build_and_load_existing_model
 import time
 import pandas as pd
@@ -19,19 +19,7 @@ cmap_segmentation = get_cmap()
 
 folder_names = get_folder_names()
 
-
-def get_nr_of_images_per_folder(names):
-    nr_per_folder = []
-    for name in names:
-        # get total nr of images in folder
-        value = input(f"Please enter desired # of images to load for {name}:\n")
-        # todo: add total nr for consideration and error handling.
-        nr_per_folder.append(int(value))
-
-    return nr_per_folder
-
-
-nr_of_images_per_folder = get_nr_of_images_per_folder(folder_names)
+nr_of_images_per_folder = get_desired_nr_of_images_per_folder(folder_names)
 
 for i, folder in enumerate(folder_names):
     no_samples = nr_of_images_per_folder[i]

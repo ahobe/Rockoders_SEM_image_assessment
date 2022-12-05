@@ -56,3 +56,14 @@ def get_ok_for_overwrite():
         print("Unexpected input. Input should be either 'y' or 'n'. Aborting")
         sys.exit()
     return overwrite_ok
+
+
+def get_desired_nr_of_images_per_folder(names):
+    nr_per_folder = []
+    for name in names:
+        # get total nr of images in folder
+        value = input(f"Please enter desired # of images to load for {name}:\n")
+        # todo: add total nr for consideration and error handling.
+        nr_per_folder.append(int(value))
+
+    return nr_per_folder
