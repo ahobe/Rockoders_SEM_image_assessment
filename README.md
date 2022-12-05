@@ -1,31 +1,26 @@
-# Rockoders_SEM_image_assessment
-SEM image assessment tool produced during the 2022 SPE geothermal hackathon
+Original submission to the SPE Europe Energy GeoHackathon focused on predicting Geothermal reservoir quality from SEM images.
+https://www.spehackathon-eu.com/
 
-### We recommend using GPU acceleration (easiest in google colab).
-- ~30 s per sample using GPU acceleration.
-- ~300 s per sample using CPU only.
+### Dataset location:
+https://dataverse.geus.dk/dataset.xhtml?persistentId=doi:10.22008/FK2/5TWAZK
+
+This dataset needs to be added into the existing folders.
+Inside each folder is a dummy tiff file, which git requires to show the folders.
+Delete these files before proceeding.
 
 ### Creating the conda environment: 
 ```bash
-conda env create -f assesSEM.yml
+conda env create -f Rockoders.yml
 ```
 
 ### Activate conda environment:
 ```bash
-conda activate assesSEM
+conda activate Rockoders
 ```
 
-### install package
+### Usage of original submission
 ```bash
-pip install -e .
+python run.py
 ```
 
-
-###TODO:
-- add results to test if the methods are working correctly
-
-Check out https://git-lfs.github.com/ for large files.
-
-
-conda env create -f Rockoders.yml
-conda env remove -n Rockoders
+You will then be prompted about the desired nr of images per dataset.

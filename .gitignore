@@ -6,3 +6,7 @@ Original_submission/dataset1/CL/*
 Original_submission/__pycache__/
 Original_submission/dataset1/CL_segmented/*
 !Original_submission/dataset1/CL_segmented/.Readme.txt
+src/assesSEM.egg-info/*
+src/assesSEM/__pycache__/
+tests/__pycache__/
+.coverage
