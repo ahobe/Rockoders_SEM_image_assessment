@@ -4,8 +4,8 @@ import numpy as np
 from os import listdir
 from os.path import isfile, join
 
-from assesSEM.IO import deal_with_folder_availability, save_image
-from assesSEM.get_user_input import get_folder_names
+from assesSEM.IO import save_image
+from assesSEM.get_user_input import get_folder_names, deal_with_folder_availability
 from assesSEM.model_manipulation import build_and_load_existing_model
 import time
 import pandas as pd
@@ -13,7 +13,7 @@ import pandas as pd
 from assesSEM.plotting import get_cmap
 from assesSEM.smooth_tiled_predictions import predict_img_with_smooth_windowing
 
-model, nb_classes = build_and_load_existing_model(name="model_mlo_512_512_2.h5")
+model, nb_classes, im_h = build_and_load_existing_model(name="model_mlo_512_512_2.h5")
 
 cmap_segmentation = get_cmap()
 

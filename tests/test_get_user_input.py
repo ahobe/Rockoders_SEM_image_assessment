@@ -3,8 +3,7 @@ from io import StringIO
 from unittest.mock import patch
 import pytest
 
-from assesSEM.get_user_input import get_ok_for_overwrite, \
-    get_folder_names
+from assesSEM.get_user_input import get_ok_for_overwrite, get_folder_names
 
 
 @pytest.mark.parametrize("response, expected", [
@@ -17,14 +16,15 @@ def test_get_ok_for_overwrite_yes(response, expected):
         overwrite_ok = get_ok_for_overwrite()
         assert overwrite_ok == expected
 
+
 @pytest.mark.parametrize("response, printed_infos", [
     ("N", 'Aborting...\n'),
     ("n", 'Aborting...\n'),
     ("..5..", "Unexpected input. Input should be either 'y' or 'n'. Aborting\n")
 ])
-def test_get_ok_for_overwrite_no(response, printed_infos):
+def test_get_ok_for_overwrite_abort(response, printed_infos):
     with pytest.raises(SystemExit) as e:
-        with patch('sys.stdout', new = StringIO()) as fake_out:
+        with patch('sys.stdout', new=StringIO()) as fake_out:
             with patch('builtins.input', return_value=response):
                 get_ok_for_overwrite()
     assert e.type == SystemExit
@@ -43,6 +43,14 @@ def test_get_folder_names(response, expected):
     with patch('builtins.input', return_value=response):
         folder_names = get_folder_names()
         assert folder_names == expected
+
+
+def test_get_folder_names_raises():
+    with pytest.raises(ValueError) as e:
+        with patch('builtins.input', return_value="..5.."):
+            get_folder_names()
+    assert e.type == ValueError
+
 
 
 if __name__ == '__main__':
