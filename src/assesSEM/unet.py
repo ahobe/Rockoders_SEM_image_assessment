@@ -1,10 +1,12 @@
 # Building Unet by dividing encoder and decoder into blocks
-
+import numpy as np
 from keras.models import Model
 from keras.layers import Input, Conv2D, MaxPooling2D, UpSampling2D, concatenate, Conv2DTranspose, BatchNormalization, \
     Dropout, Lambda
 from keras.optimizers import Adam
 from keras.layers import Activation, MaxPool2D, Concatenate
+
+from assesSEM.IO import read_and_normalize_image
 
 
 def conv_block(input, num_filters):
@@ -86,3 +88,17 @@ def get_model_shape_and_classes(name='default'):
     else:
         return ValueError
     return nb_classes, input_shape
+
+
+def create_unet_input(bse_im, cl_im):
+    x = np.zeros([cl_im.shape[0], cl_im.shape[1], 2])
+    x[:, :, 0] = cl_im
+    x[:, :, 1] = bse_im
+    return x
+
+
+def get_unet_input(image_path_bse, image_path_cl):
+    cl_im = read_and_normalize_image(image_path_cl)
+    bse_im = read_and_normalize_image(image_path_bse)
+    unet_input = create_unet_input(bse_im, cl_im)
+    return unet_input

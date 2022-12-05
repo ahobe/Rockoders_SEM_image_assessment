@@ -1,21 +1,20 @@
 import os
 import time
-
 import numpy as np
 
 from assesSEM.IO import get_names_for_image_type_folders, create_image_predictions_folder, initialize_result_csv, \
-    read_and_normalize_image, save_image
+    save_image
 from assesSEM.get_user_input import get_folder_names, get_desired_nr_of_images_per_folder, \
     get_common_image_nrs_from_both_image_types
 from assesSEM.model_manipulation import build_and_load_existing_model
 from assesSEM.plotting import get_cmap
+from assesSEM.postprocessing import get_percentage_values_for_labels
 from assesSEM.smooth_tiled_predictions import predict_img_with_smooth_windowing
+from assesSEM.unet import get_unet_input
 
 
 def run_original_pipeline(model_name):
     model, nb_classes, im_h = build_and_load_existing_model(name=model_name)
-
-    cmap_segmentation = get_cmap()
 
     folder_names = get_folder_names()
 
@@ -38,20 +37,15 @@ def run_original_pipeline(model_name):
             image_path_bse = path_folder_bse + im_name
             check1 = os.path.isfile(image_path_cl)
             check2 = os.path.isfile(image_path_bse)
+
             if check1 == True and check2 == True:
                 print('Segmenting', im_name, '..')
-                cl_im = read_and_normalize_image(image_path_cl)
-                bse_im = read_and_normalize_image(image_path_bse)
-
-                # Create input for UNet
-                X = np.zeros([cl_im.shape[0], cl_im.shape[1], 2])
-                X[:, :, 0] = cl_im
-                X[:, :, 1] = bse_im
+                unet_input = get_unet_input(image_path_bse, image_path_cl)
 
                 # Start segmentation (+moving window w. patch size + smoothing)
                 start = time.time()
                 predictions_smooth = predict_img_with_smooth_windowing(
-                    X,
+                    unet_input,
                     window_size=im_h,
                     subdivisions=2,  # Minimal amount of overlap for windowing. Must be an even number.
                     nb_classes=nb_classes,
@@ -65,17 +59,12 @@ def run_original_pipeline(model_name):
                 # Save &/ plot image
                 test_argmax = np.argmax(predictions_smooth, axis=2)
 
+                cmap_segmentation = get_cmap()
                 save_image(test_argmax, cmap_segmentation, predictions_path + '/' + im_name)
 
-                total_area = test_argmax.shape[0] * test_argmax.shape[1]
-                percentage_table['path'][iSample] = predictions_path + '/' + im_name
-                percentage_table['quartz_rel_area'][iSample] = np.round(np.count_nonzero(test_argmax == 4) / total_area * 100, 2)
-                percentage_table['otherminerals_rel_area'][iSample] = np.round(
-                    np.count_nonzero(test_argmax == 3) / total_area * 100, 2)
-                percentage_table['overgrowth_rel_area'][iSample] = np.round(np.count_nonzero(test_argmax == 2) / total_area * 100,
-                                                                            2)
-                percentage_table['pores_rel_area'][iSample] = np.round(np.count_nonzero(test_argmax == 1) / total_area * 100, 2)
-                print('Done and saved!')
+                percentage_table = get_percentage_values_for_labels(iSample, im_name, percentage_table, predictions_path, test_argmax)
 
         percentage_table.to_csv(predictions_path + '/' + 'results_' + folder + '.csv', index=False)
         print('.csv-file saved!')
+
+
