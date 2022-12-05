@@ -5,20 +5,13 @@ from os import listdir
 from os.path import isfile, join
 
 from assesSEM.IO import deal_with_folder_availability, save_image
-from assesSEM.unet import build_unet, get_model_shape_and_classes
+from assesSEM.model_manipulation import build_and_load_existing_model
 import matplotlib as mpl
 import time
 import pandas as pd
 from assesSEM.smooth_tiled_predictions import predict_img_with_smooth_windowing
-from importlib.resources import files  # used to access models included in the package
 
-nb_classes, input_shape = get_model_shape_and_classes()
-model = build_unet(input_shape, n_classes=5)
-model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
-
-# Load previously saved model
-model_path = files('assesSEM.models').joinpath("model_mlo_512_512_2.h5")
-model.load_weights(model_path)
+model, nb_classes = build_and_load_existing_model(name="model_mlo_512_512_2.h5")
 
 cmap_segmentation = (mpl.colors.ListedColormap(['white', 'white', '#000000', '#ff0000', '#00ff00', '#ffff00']))
 # ffff00 yellow
