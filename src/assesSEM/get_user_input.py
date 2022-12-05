@@ -1,5 +1,6 @@
 import os
 import sys
+import glob
 
 
 def get_folder_names():
@@ -61,9 +62,21 @@ def get_ok_for_overwrite():
 def get_desired_nr_of_images_per_folder(names):
     nr_per_folder = []
     for name in names:
-        value = input(f"Please enter desired # of images to load for {name}:")
-        # get total nr of images in folder
-        # todo: add total nr for consideration and error handling.
-        nr_per_folder.append(int(value))
+        max_nr_of_images = get_nr_of_images_in_folder(name)
+        value = input(f"Please enter desired # of images to load for {name} (max {max_nr_of_images}):")
+        try:
+            check = int(value)
+            if check <= int(max_nr_of_images):
+                nr_per_folder.append(check)
+            else:
+                print('Chosen amount is too large for this folder. Aborting')
+                sys.exit()
+        except Exception:
+            raise ValueError
 
     return nr_per_folder
+
+
+def get_nr_of_images_in_folder(folder_path):
+    nr_of_images = len(glob.glob1(folder_path, "*.tif"))
+    return nr_of_images

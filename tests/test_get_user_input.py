@@ -74,5 +74,22 @@ def test_get_desired_nr_of_images_per_folder_multiple():
         assert nr_per_folder == expected
 
 
+def test_get_desired_nr_of_images_per_folder_raises():
+    folder_names = ['stuff']
+    with pytest.raises(ValueError) as e:
+        with patch('builtins.input', return_value='..5..'):
+            get_desired_nr_of_images_per_folder(folder_names)
+    assert e.type == ValueError
+
+
+def test_get_desired_nr_of_images_per_folder_too_many():
+    folder_names = ['stuff']
+    with pytest.raises(SystemExit) as e:
+        with patch('builtins.input', return_value='5'):
+            with patch('assesSEM.get_user_input.get_nr_of_images_in_folder', return_value='2'):
+                get_desired_nr_of_images_per_folder(folder_names)
+    assert e.type == SystemExit
+
+
 if __name__ == '__main__':
     unittest.main()
