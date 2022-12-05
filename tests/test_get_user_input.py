@@ -20,12 +20,12 @@ def test_get_ok_for_overwrite_yes(response, expected):
 @pytest.mark.parametrize("response, printed_infos", [
     ("N", 'Aborting...\n'),
     ("n", 'Aborting...\n'),
-    ("..5..", "Unexpected input. Input should be either 'y' or 'n'. Aborting")
+    ("..5..", "Unexpected input. Input should be either 'y' or 'n'. Aborting\n")
 ])
 def test_get_ok_for_overwrite_no(response, printed_infos):
     with pytest.raises(SystemExit) as e:
         with patch('sys.stdout', new = StringIO()) as fake_out:
-            with patch('builtins.input', return_value='N'):
+            with patch('builtins.input', return_value=response):
                 get_ok_for_overwrite()
     assert e.type == SystemExit
     assert e.value.code is None
