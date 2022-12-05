@@ -27,11 +27,14 @@ def save_image(data, file_name, cmap_name='hackathon'):
     plt.close()
 
 
-def create_image_predictions_folder(folder):
+def create_image_predictions_folders(folder_names):
     new_directory = 'CL_segmented'
-    path = os.path.join(folder, new_directory)
-    deal_with_folder_availability(path)
-    return path
+    paths = []
+    for iFolder, folder in enumerate(folder_names):
+        path = os.path.join(folder, new_directory)
+        deal_with_folder_availability(path)
+        paths.append(path)
+    return paths
 
 
 def initialize_result_csv(files_cl):

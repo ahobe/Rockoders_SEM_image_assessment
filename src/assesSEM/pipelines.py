@@ -2,7 +2,7 @@ import os
 import time
 import numpy as np
 
-from assesSEM.IO import create_image_predictions_folder, initialize_result_csv, \
+from assesSEM.IO import create_image_predictions_folders, initialize_result_csv, \
     save_image
 from assesSEM.get_user_input import get_folder_names, get_desired_nr_of_images_per_folder, \
     get_common_image_nrs_from_both_image_types, get_names_for_image_type_folders
@@ -18,19 +18,18 @@ def run_original_pipeline(model_name):
 
     folder_names = get_folder_names()
     nr_of_images_per_folder = get_desired_nr_of_images_per_folder(folder_names)
-
+    predictions_paths = create_image_predictions_folders(folder_names)
 
     for iFolder, folder in enumerate(folder_names):
-        no_samples = nr_of_images_per_folder[iFolder]
         path_folder_bse, path_folder_cl = get_names_for_image_type_folders(folder)
-        print(path_folder_bse)
         images_in_both = get_common_image_nrs_from_both_image_types(path_folder_bse, path_folder_cl)
 
         # im_dummy = cv2.imread(path_folder_cl + onlyfiles_cl[0], 0)
 
-        predictions_path = create_image_predictions_folder(folder)
+        predictions_path = predictions_paths[iFolder]
         percentage_table = initialize_result_csv(images_in_both)
 
+        no_samples = nr_of_images_per_folder[iFolder]
         for iSample in range(no_samples):
             im_name = images_in_both[iSample]
             image_path_cl = path_folder_cl + im_name
