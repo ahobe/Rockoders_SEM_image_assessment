@@ -6,20 +6,15 @@ from os.path import isfile, join
 
 from assesSEM.IO import deal_with_folder_availability, save_image
 from assesSEM.model_manipulation import build_and_load_existing_model
-import matplotlib as mpl
 import time
 import pandas as pd
+
+from assesSEM.plotting import get_cmap
 from assesSEM.smooth_tiled_predictions import predict_img_with_smooth_windowing
 
 model, nb_classes = build_and_load_existing_model(name="model_mlo_512_512_2.h5")
 
-cmap_segmentation = (mpl.colors.ListedColormap(['white', 'white', '#000000', '#ff0000', '#00ff00', '#ffff00']))
-# ffff00 yellow
-# 000000 black
-# 00ff00 green
-# ff0000 red
-# original colors
-
+cmap_segmentation = get_cmap()
 
 x = ['dataset1', 'dataset2', 'dataset3', 'dataset4']
 
