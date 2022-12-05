@@ -3,7 +3,7 @@ from io import StringIO
 from unittest.mock import patch
 import pytest
 
-from assesSEM.get_user_input import get_ok_for_overwrite, get_folder_names
+from assesSEM.get_user_input import get_ok_for_overwrite, get_folder_names, get_desired_nr_of_images_per_folder
 
 
 @pytest.mark.parametrize("response, expected", [
@@ -50,6 +50,28 @@ def test_get_folder_names_raises():
         with patch('builtins.input', return_value="..5.."):
             get_folder_names()
     assert e.type == ValueError
+
+
+@pytest.mark.parametrize("folder_names, response, expected", [
+    (['dataset1'], "5", [5]),
+    (['dataset2'], "7", [7]),
+    (['dataset3'], "12", [12]),
+    (['dataset4'], "9", [9]),
+
+])
+def test_get_desired_nr_of_images_per_folder(folder_names, response, expected):
+    with patch('builtins.input', return_value=response):
+        nr_per_folder = get_desired_nr_of_images_per_folder(folder_names)
+        assert nr_per_folder == expected
+
+
+def test_get_desired_nr_of_images_per_folder_multiple():
+    folder_names = ['dataset1', 'dataset2', 'dataset3', 'dataset4']
+    responses = ["5", "7", "12", "9"]
+    expected = [5, 7, 12, 9]
+    with patch('builtins.input', side_effect=responses):
+        nr_per_folder = get_desired_nr_of_images_per_folder(folder_names)
+        assert nr_per_folder == expected
 
 
 if __name__ == '__main__':
