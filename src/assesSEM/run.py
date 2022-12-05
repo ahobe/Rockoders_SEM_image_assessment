@@ -5,21 +5,16 @@ from os import listdir
 from os.path import isfile, join
 
 from assesSEM.IO import deal_with_folder_availability, save_image
-from assesSEM.unet import build_unet
+from assesSEM.unet import build_unet, get_model_shape_and_classes
 import matplotlib as mpl
 import time
 import pandas as pd
 from assesSEM.smooth_tiled_predictions import predict_img_with_smooth_windowing
 from importlib.resources import files  # used to access models included in the package
 
-im_h = 512  # height
-im_w = 512  # width
-im_ch = 2  # no of channels (1 for BSE and 1 for CL)
-nb_classes = 5
-input_shape = (im_h, im_w, im_ch)
-
-model = build_unet(input_shape, n_classes=5);
-model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy']);
+nb_classes, input_shape = get_model_shape_and_classes()
+model = build_unet(input_shape, n_classes=5)
+model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
 
 # Load previously saved model
 model_path = files('assesSEM.models').joinpath("model_mlo_512_512_2.h5")

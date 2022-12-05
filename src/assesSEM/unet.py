@@ -1,32 +1,35 @@
 # Building Unet by dividing encoder and decoder into blocks
 
 from keras.models import Model
-from keras.layers import Input, Conv2D, MaxPooling2D, UpSampling2D, concatenate, Conv2DTranspose, BatchNormalization, Dropout, Lambda
+from keras.layers import Input, Conv2D, MaxPooling2D, UpSampling2D, concatenate, Conv2DTranspose, BatchNormalization, \
+    Dropout, Lambda
 from keras.optimizers import Adam
 from keras.layers import Activation, MaxPool2D, Concatenate
 
 
 def conv_block(input, num_filters):
     x = Conv2D(num_filters, 3, padding="same")(input)
-    x = BatchNormalization()(x)   #Not in the original network. 
+    x = BatchNormalization()(x)  # Not in the original network.
     x = Activation("relu")(x)
 
     x = Conv2D(num_filters, 3, padding="same")(x)
-    x = BatchNormalization()(x)  #Not in the original network
+    x = BatchNormalization()(x)  # Not in the original network
     x = Activation("relu")(x)
 
     return x
 
-#Encoder block: Conv block followed by maxpooling
+
+# Encoder block: Conv block followed by maxpooling
 
 
 def encoder_block(input, num_filters):
     x = conv_block(input, num_filters)
     p = MaxPool2D((2, 2))(x)
-    return x, p   
+    return x, p
 
-#Decoder block
-#skip features gets input from encoder for concatenation
+
+# Decoder block
+# skip features gets input from encoder for concatenation
 
 def decoder_block(input, skip_features, num_filters):
     x = Conv2DTranspose(num_filters, (2, 2), strides=2, padding="same")(input)
@@ -34,7 +37,8 @@ def decoder_block(input, skip_features, num_filters):
     x = conv_block(x, num_filters)
     return x
 
-#Build Unet using the blocks
+
+# Build Unet using the blocks
 def build_unet(input_shape, n_classes):
     inputs = Input(input_shape)
 
@@ -43,20 +47,42 @@ def build_unet(input_shape, n_classes):
     s3, p3 = encoder_block(p2, 256)
     s4, p4 = encoder_block(p3, 512)
 
-    b1 = conv_block(p4, 1024) #Bridge
+    b1 = conv_block(p4, 1024)  # Bridge
 
     d1 = decoder_block(b1, s4, 512)
     d2 = decoder_block(d1, s3, 256)
     d3 = decoder_block(d2, s2, 128)
     d4 = decoder_block(d3, s1, 64)
 
-    if n_classes == 1:  #Binary
-      activation = 'sigmoid'
+    if n_classes == 1:  # Binary
+        activation = 'sigmoid'
     else:
-      activation = 'softmax'
+        activation = 'softmax'
 
-    outputs = Conv2D(n_classes, 1, padding="same", activation=activation)(d4)  #Change the activation based on n_classes
-    #print(activation)
+    outputs = Conv2D(n_classes, 1, padding="same", activation=activation)(
+        d4)  # Change the activation based on n_classes
+    # print(activation)
 
     model = Model(inputs, outputs, name="U-Net")
     return model
+
+
+class ModelAttributes:
+    def __init__(self):
+        self.image_height = 512
+        self.image_width = 512
+        self.no_of_channels = 2
+        self.no_of_classes = 5
+
+
+def get_model_shape_and_classes(name='default'):
+    if name == 'default':
+        model_params = ModelAttributes()
+        im_h = model_params.image_height  # height
+        im_w = model_params.image_width  # width
+        im_ch = model_params.no_of_channels  # no of channels (1 for BSE and 1 for CL)
+        nb_classes = model_params.no_of_classes
+        input_shape = (im_h, im_w, im_ch)
+    else:
+        return ValueError
+    return nb_classes, input_shape
