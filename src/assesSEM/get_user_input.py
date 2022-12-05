@@ -63,7 +63,8 @@ def get_ok_for_overwrite():
 def get_desired_nr_of_images_per_folder(names):
     nr_per_folder = []
     for name in names:
-        max_nr_of_images = int(get_nr_of_images_in_folder(name))
+        folder, _ = get_names_for_image_type_folders(name)
+        max_nr_of_images = int(get_nr_of_images_in_folder(folder))
         value = input(f"Please enter desired # of images to load for {name} (max {max_nr_of_images}):")
         try:
             check = int(value)
@@ -78,12 +79,14 @@ def get_desired_nr_of_images_per_folder(names):
 
 
 def get_nr_of_images_in_folder(folder_path):
-    nr_of_images = len(glob.glob1(folder_path, "*.tif"))
+    nr_of_images = len(get_names_of_images_in_folder(folder_path))
     return nr_of_images
 
 
 def get_names_of_images_in_folder(folder_path):
+    print(folder_path)
     image_names = glob.glob1(folder_path, "*.tif")
+    print(image_names)
     return image_names
 
 
@@ -97,3 +100,10 @@ def get_common_image_nrs_from_both_image_types(path_folder_bse, path_folder_cl):
         if isfile(join(path_folder_bse, file)):
             images_available_in_both.append(file)
     return images_available_in_both
+
+
+def get_names_for_image_type_folders(folder):
+    print('Opening folder', folder, '..')
+    path_folder_cl = folder + '/CL/'
+    path_folder_bse = folder + '/BSE/'
+    return path_folder_bse, path_folder_cl

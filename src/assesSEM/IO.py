@@ -4,9 +4,14 @@ import numpy as np
 import pandas as pd
 from matplotlib import pyplot as plt
 from assesSEM.get_user_input import deal_with_folder_availability
+from assesSEM.plotting import get_cmap
 
 
-def save_image(data, cm, fn):
+def save_image(data, file_name, cmap_name='hackathon'):
+    if cmap_name == 'hackathon':
+        cmap = get_cmap()
+    else:
+        cmap = cmap_name
     sizes = np.shape(data)
     height = float(sizes[0])
     width = float(sizes[1])
@@ -17,16 +22,9 @@ def save_image(data, cm, fn):
     ax.set_axis_off()
     fig.add_axes(ax)
 
-    ax.imshow(data, cmap=cm, vmin=-1, vmax=4)
-    plt.savefig(fn, dpi=height)
+    ax.imshow(data, cmap=cmap, vmin=-1, vmax=4)
+    plt.savefig(file_name, dpi=height)
     plt.close()
-
-
-def get_names_for_image_type_folders(folder):
-    print('Opening folder', folder, '..')
-    path_folder_cl = folder + '/CL/'
-    path_folder_bse = folder + '/BSE/'
-    return path_folder_bse, path_folder_cl
 
 
 def create_image_predictions_folder(folder):

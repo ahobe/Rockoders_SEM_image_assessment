@@ -2,10 +2,10 @@ import os
 import time
 import numpy as np
 
-from assesSEM.IO import get_names_for_image_type_folders, create_image_predictions_folder, initialize_result_csv, \
+from assesSEM.IO import create_image_predictions_folder, initialize_result_csv, \
     save_image
 from assesSEM.get_user_input import get_folder_names, get_desired_nr_of_images_per_folder, \
-    get_common_image_nrs_from_both_image_types
+    get_common_image_nrs_from_both_image_types, get_names_for_image_type_folders
 from assesSEM.model_manipulation import build_and_load_existing_model
 from assesSEM.plotting import get_cmap
 from assesSEM.postprocessing import get_percentage_values_for_labels
@@ -17,18 +17,18 @@ def run_original_pipeline(model_name):
     model, nb_classes, im_h = build_and_load_existing_model(name=model_name)
 
     folder_names = get_folder_names()
-
     nr_of_images_per_folder = get_desired_nr_of_images_per_folder(folder_names)
+
 
     for iFolder, folder in enumerate(folder_names):
         no_samples = nr_of_images_per_folder[iFolder]
-        get_common_image_nrs_from_both_image_types()
-        path_folder_bse, path_folder_cl = get_names_for_image_type_folders()
+        path_folder_bse, path_folder_cl = get_names_for_image_type_folders(folder)
+        print(path_folder_bse)
         images_in_both = get_common_image_nrs_from_both_image_types(path_folder_bse, path_folder_cl)
 
         # im_dummy = cv2.imread(path_folder_cl + onlyfiles_cl[0], 0)
 
-        predictions_path = create_image_predictions_folder()
+        predictions_path = create_image_predictions_folder(folder)
         percentage_table = initialize_result_csv(images_in_both)
 
         for iSample in range(no_samples):
@@ -58,13 +58,12 @@ def run_original_pipeline(model_name):
 
                 # Save &/ plot image
                 test_argmax = np.argmax(predictions_smooth, axis=2)
+                output_file_name = predictions_path + '/' + im_name
 
-                cmap_segmentation = get_cmap()
-                save_image(test_argmax, cmap_segmentation, predictions_path + '/' + im_name)
+                save_image(test_argmax, output_file_name)
 
-                percentage_table = get_percentage_values_for_labels(iSample, im_name, percentage_table, predictions_path, test_argmax)
+                percentage_table = get_percentage_values_for_labels(iSample, im_name, percentage_table,
+                                                                    predictions_path, test_argmax)
 
         percentage_table.to_csv(predictions_path + '/' + 'results_' + folder + '.csv', index=False)
         print('.csv-file saved!')
-
-

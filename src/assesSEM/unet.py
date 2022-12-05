@@ -87,7 +87,7 @@ def get_model_shape_and_classes(name='default'):
         input_shape = (im_h, im_w, im_ch)
     else:
         return ValueError
-    return nb_classes, input_shape
+    return nb_classes, input_shape, im_h
 
 
 def create_unet_input(bse_im, cl_im):
