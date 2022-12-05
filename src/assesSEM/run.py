@@ -4,11 +4,11 @@ import numpy as np
 from os import listdir
 from os.path import isfile, join
 
-from assesSEM.IO import save_image
-from assesSEM.get_user_input import get_folder_names, deal_with_folder_availability, get_desired_nr_of_images_per_folder
+from assesSEM.IO import save_image, get_names_for_image_type_folders, create_image_predictions_folder, \
+    initialize_result_csv
+from assesSEM.get_user_input import get_folder_names, get_desired_nr_of_images_per_folder
 from assesSEM.model_manipulation import build_and_load_existing_model
 import time
-import pandas as pd
 
 from assesSEM.plotting import get_cmap
 from assesSEM.smooth_tiled_predictions import predict_img_with_smooth_windowing
@@ -21,36 +21,38 @@ folder_names = get_folder_names()
 
 nr_of_images_per_folder = get_desired_nr_of_images_per_folder(folder_names)
 
-for i, folder in enumerate(folder_names):
-    no_samples = nr_of_images_per_folder[i]
 
-    print('Opening folder', folder, '..')
-    path_folder_cl = folder + '/CL/'
-    path_folder_bse = folder + '/BSE/'
-
+def get_common_image_nrs_from_both_image_types(path_folder_bse, path_folder_cl):
     onlyfiles_cl = [f for f in listdir(path_folder_cl) if isfile(join(path_folder_cl, f))]
     onlyfiles_bse = [f for f in listdir(path_folder_bse) if isfile(join(path_folder_bse, f))]
     print('Found', len(onlyfiles_cl), 'files in CL folder:')
     print('Found', len(onlyfiles_bse), 'files in BSE folder:')
+    # todo: would be more efficient to check these against each other.
+    # todo: these should be tiffs! not just files!
+    return onlyfiles_cl
 
-    im_dummy = cv2.imread(path_folder_cl + onlyfiles_cl[0], 0)
 
-    # Create 'CL segmented' folder
-    directory = 'CL_segmented'
-    path = os.path.join(folder, directory)
-    deal_with_folder_availability(path)
+for iFolder, folder in enumerate(folder_names):
+    no_samples = nr_of_images_per_folder[iFolder]
+    get_common_image_nrs_from_both_image_types()
+    path_folder_bse, path_folder_cl = get_names_for_image_type_folders()
+    onlyfiles_cl = get_common_image_nrs_from_both_image_types(path_folder_bse, path_folder_cl)
+
+    # im_dummy = cv2.imread(path_folder_cl + onlyfiles_cl[0], 0)
+
+    predictions_path = create_image_predictions_folder()
 
     # CSV array dummy
-    dummy_array = np.zeros([len(onlyfiles_cl), 5])
-    df = pd.DataFrame(data=dummy_array,
-                      columns=['path', 'quartz_rel_area', 'overgrowth_rel_area', 'otherminerals_rel_area',
-                               'pores_rel_area'])
+    percentage_table = initialize_result_csv(onlyfiles_cl)
 
     # Start segmenting images...
-    for i in range(no_samples):
-        check1 = os.path.isfile(path_folder_cl + onlyfiles_cl[i])
-        if check1 == True:
-            im_name = onlyfiles_cl[i]
+    for iSample in range(no_samples):
+        im_name = onlyfiles_cl[iSample]
+        image_path_cl = path_folder_cl + im_name
+        image_path_bse = path_folder_bse + im_name
+        check1 = os.path.isfile(image_path_cl)
+        check2 = os.path.isfile(image_path_bse)
+        if check1 == True and check2 == True:
             print('Segmenting', im_name, '..')
             cl_im = cv2.imread(path_folder_cl + im_name, 0)
             cl_im = cl_im / 255  # Normalize
@@ -79,15 +81,17 @@ for i, folder in enumerate(folder_names):
             # Save &/ plot image
             test_argmax = np.argmax(predictions_smooth, axis=2)
 
-            save_image(test_argmax, cmap_segmentation, path + '/' + im_name)
+            save_image(test_argmax, cmap_segmentation, predictions_path + '/' + im_name)
 
             total_area = test_argmax.shape[0] * test_argmax.shape[1]
-            df['path'][i] = path + '/' + im_name
-            df['quartz_rel_area'][i] = np.round(np.count_nonzero(test_argmax == 4) / total_area * 100, 2)
-            df['otherminerals_rel_area'][i] = np.round(np.count_nonzero(test_argmax == 3) / total_area * 100, 2)
-            df['overgrowth_rel_area'][i] = np.round(np.count_nonzero(test_argmax == 2) / total_area * 100, 2)
-            df['pores_rel_area'][i] = np.round(np.count_nonzero(test_argmax == 1) / total_area * 100, 2)
+            percentage_table['path'][iSample] = predictions_path + '/' + im_name
+            percentage_table['quartz_rel_area'][iSample] = np.round(np.count_nonzero(test_argmax == 4) / total_area * 100, 2)
+            percentage_table['otherminerals_rel_area'][iSample] = np.round(
+                np.count_nonzero(test_argmax == 3) / total_area * 100, 2)
+            percentage_table['overgrowth_rel_area'][iSample] = np.round(np.count_nonzero(test_argmax == 2) / total_area * 100,
+                                                                        2)
+            percentage_table['pores_rel_area'][iSample] = np.round(np.count_nonzero(test_argmax == 1) / total_area * 100, 2)
             print('Done and saved!')
 
-    df.to_csv(path + '/' + 'results_' + folder + '.csv', index=False)
+    percentage_table.to_csv(predictions_path + '/' + 'results_' + folder + '.csv', index=False)
     print('.csv-file saved!')

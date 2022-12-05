@@ -1,5 +1,11 @@
+import os
+
 import numpy as np
+import pandas as pd
 from matplotlib import pyplot as plt
+
+from assesSEM.get_user_input import deal_with_folder_availability
+from assesSEM.run import folder
 
 
 def save_image(data, cm, fn):
@@ -16,3 +22,25 @@ def save_image(data, cm, fn):
     ax.imshow(data, cmap=cm, vmin=-1, vmax=4)
     plt.savefig(fn, dpi=height)
     plt.close()
+
+
+def get_names_for_image_type_folders():
+    print('Opening folder', folder, '..')
+    path_folder_cl = folder + '/CL/'
+    path_folder_bse = folder + '/BSE/'
+    return path_folder_bse, path_folder_cl
+
+
+def create_image_predictions_folder():
+    directory = 'CL_segmented'
+    path = os.path.join(folder, directory)
+    deal_with_folder_availability(path)
+    return path
+
+
+def initialize_result_csv(files_cl):
+    col_names = ['path', 'quartz_rel_area', 'overgrowth_rel_area', 'otherminerals_rel_area',
+                 'pores_rel_area']
+    dummy_array = np.zeros([len(files_cl), len(col_names)])
+    df = pd.DataFrame(data=dummy_array, columns=col_names)
+    return df
