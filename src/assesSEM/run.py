@@ -19,11 +19,22 @@ cmap_segmentation = get_cmap()
 
 folder_names = get_folder_names()
 
-value = input("Please enter # of images loaded per dataset folder:\n")
-print(f'You entered {value}')
-no_samples = int(value)
 
-for folder in folder_names:
+def get_nr_of_images_per_folder(names):
+    nr_per_folder = []
+    for name in names:
+        # get total nr of images in folder
+        value = input(f"Please enter desired # of images to load for {name}:\n")
+        # todo: add total nr for consideration and error handling.
+        nr_per_folder.append(int(value))
+
+    return nr_per_folder
+
+
+nr_of_images_per_folder = get_nr_of_images_per_folder(folder_names)
+
+for i, folder in enumerate(folder_names):
+    no_samples = nr_of_images_per_folder[i]
 
     print('Opening folder', folder, '..')
     path_folder_cl = folder + '/CL/'
