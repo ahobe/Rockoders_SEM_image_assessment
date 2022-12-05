@@ -61,8 +61,9 @@ def test_get_folder_names_raises():
 ])
 def test_get_desired_nr_of_images_per_folder(folder_names, response, expected):
     with patch('builtins.input', return_value=response):
-        nr_per_folder = get_desired_nr_of_images_per_folder(folder_names)
-        assert nr_per_folder == expected
+        with patch('assesSEM.get_user_input.get_nr_of_images_in_folder', return_value='900'):
+            nr_per_folder = get_desired_nr_of_images_per_folder(folder_names)
+            assert nr_per_folder == expected
 
 
 def test_get_desired_nr_of_images_per_folder_multiple():
@@ -70,8 +71,9 @@ def test_get_desired_nr_of_images_per_folder_multiple():
     responses = ["5", "7", "12", "9"]
     expected = [5, 7, 12, 9]
     with patch('builtins.input', side_effect=responses):
-        nr_per_folder = get_desired_nr_of_images_per_folder(folder_names)
-        assert nr_per_folder == expected
+        with patch('assesSEM.get_user_input.get_nr_of_images_in_folder', return_value='900'):
+            nr_per_folder = get_desired_nr_of_images_per_folder(folder_names)
+            assert nr_per_folder == expected
 
 
 def test_get_desired_nr_of_images_per_folder_raises():
@@ -84,11 +86,10 @@ def test_get_desired_nr_of_images_per_folder_raises():
 
 def test_get_desired_nr_of_images_per_folder_too_many():
     folder_names = ['stuff']
-    with pytest.raises(SystemExit) as e:
-        with patch('builtins.input', return_value='5'):
-            with patch('assesSEM.get_user_input.get_nr_of_images_in_folder', return_value='2'):
-                get_desired_nr_of_images_per_folder(folder_names)
-    assert e.type == SystemExit
+    with patch('builtins.input', return_value='5'):
+        with patch('assesSEM.get_user_input.get_nr_of_images_in_folder', return_value='2'):
+            nr_per_folder = get_desired_nr_of_images_per_folder(folder_names)
+            assert nr_per_folder == [2]
 
 
 if __name__ == '__main__':

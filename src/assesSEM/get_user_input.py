@@ -62,15 +62,14 @@ def get_ok_for_overwrite():
 def get_desired_nr_of_images_per_folder(names):
     nr_per_folder = []
     for name in names:
-        max_nr_of_images = get_nr_of_images_in_folder(name)
+        max_nr_of_images = int(get_nr_of_images_in_folder(name))
         value = input(f"Please enter desired # of images to load for {name} (max {max_nr_of_images}):")
         try:
             check = int(value)
-            if check <= int(max_nr_of_images):
+            if check <= max_nr_of_images:
                 nr_per_folder.append(check)
             else:
-                print('Chosen amount is too large for this folder. Aborting')
-                sys.exit()
+                nr_per_folder.append(max_nr_of_images)
         except Exception:
             raise ValueError
 
