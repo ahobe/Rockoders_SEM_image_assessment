@@ -1,12 +1,9 @@
 import os
-
 import cv2
 import numpy as np
 import pandas as pd
 from matplotlib import pyplot as plt
-
 from assesSEM.get_user_input import deal_with_folder_availability
-from assesSEM.run import folder
 
 
 def save_image(data, cm, fn):
@@ -25,16 +22,16 @@ def save_image(data, cm, fn):
     plt.close()
 
 
-def get_names_for_image_type_folders():
+def get_names_for_image_type_folders(folder):
     print('Opening folder', folder, '..')
     path_folder_cl = folder + '/CL/'
     path_folder_bse = folder + '/BSE/'
     return path_folder_bse, path_folder_cl
 
 
-def create_image_predictions_folder():
-    directory = 'CL_segmented'
-    path = os.path.join(folder, directory)
+def create_image_predictions_folder(folder):
+    new_directory = 'CL_segmented'
+    path = os.path.join(folder, new_directory)
     deal_with_folder_availability(path)
     return path
 

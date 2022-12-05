@@ -12,8 +12,8 @@ from assesSEM.plotting import get_cmap
 from assesSEM.smooth_tiled_predictions import predict_img_with_smooth_windowing
 
 
-def run_original_pipeline(model_name, base_directory):
-    model, nb_classes, im_h = build_and_load_existing_model(name="model_mlo_512_512_2.h5")
+def run_original_pipeline(model_name):
+    model, nb_classes, im_h = build_and_load_existing_model(name=model_name)
 
     cmap_segmentation = get_cmap()
 

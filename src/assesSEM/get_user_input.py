@@ -1,7 +1,6 @@
 import os
 import sys
 import glob
-from os import listdir
 from os.path import isfile, join
 
 
@@ -91,11 +90,8 @@ def get_names_of_images_in_folder(folder_path):
 def get_common_image_nrs_from_both_image_types(path_folder_bse, path_folder_cl):
     onlyfiles_cl = get_names_of_images_in_folder(path_folder_cl)
     onlyfiles_bse = get_names_of_images_in_folder(path_folder_bse)
-    onlyfiles_bse = [f for f in listdir(path_folder_bse) if isfile(join(path_folder_bse, f))]
     print('Found', len(onlyfiles_cl), 'files in CL folder:')
     print('Found', len(onlyfiles_bse), 'files in BSE folder:')
-    # todo: would be more efficient to check these against each other.
-    # todo: these should be tiffs! not just files!
     images_available_in_both = []
     for file in onlyfiles_cl:
         if isfile(join(path_folder_bse, file)):
