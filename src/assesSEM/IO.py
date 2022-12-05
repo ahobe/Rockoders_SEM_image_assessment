@@ -1,5 +1,6 @@
 import os
 
+import cv2
 import numpy as np
 import pandas as pd
 from matplotlib import pyplot as plt
@@ -44,3 +45,9 @@ def initialize_result_csv(files_cl):
     dummy_array = np.zeros([len(files_cl), len(col_names)])
     df = pd.DataFrame(data=dummy_array, columns=col_names)
     return df
+
+
+def read_and_normalize_image(image_path):
+    im = cv2.imread(image_path, 0)
+    im = im / 255  # Normalize
+    return im
