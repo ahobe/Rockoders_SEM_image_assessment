@@ -13,7 +13,7 @@ from assesSEM.get_user_input import get_ok_for_overwrite, get_folder_names, get_
 ])
 def test_get_ok_for_overwrite_yes(response, expected):
     with patch('builtins.input', return_value=response):
-        overwrite_ok = get_ok_for_overwrite()
+        overwrite_ok = get_ok_for_overwrite('.')
         assert overwrite_ok == expected
 
 
@@ -26,7 +26,7 @@ def test_get_ok_for_overwrite_abort(response, printed_infos):
     with pytest.raises(SystemExit) as e:
         with patch('sys.stdout', new=StringIO()) as fake_out:
             with patch('builtins.input', return_value=response):
-                get_ok_for_overwrite()
+                get_ok_for_overwrite('.')
     assert e.type == SystemExit
     assert e.value.code is None
     assert fake_out.getvalue() == printed_infos
@@ -36,8 +36,9 @@ def test_get_ok_for_overwrite_abort(response, printed_infos):
     ("1", ['dataset1']),
     ("2", ['dataset2']),
     ("3", ['dataset3']),
-    ("4", ['dataset4']),
-    ("0", ['dataset1', 'dataset2', 'dataset3', 'dataset4'])
+    ("4", ['dataset4A']),
+    ("5", ['dataset4B']),
+    ("0", ['dataset1', 'dataset2', 'dataset3', 'dataset4A', 'dataset4B'])
 ])
 def test_get_folder_names(response, expected):
     with patch('builtins.input', return_value=response):
