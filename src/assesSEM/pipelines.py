@@ -26,8 +26,6 @@ def run_original_pipeline(model_name):
         path_folder_bse, path_folder_cl = get_names_for_image_type_folders(folder)
         images_in_both = get_common_image_nrs_from_both_image_types(path_folder_bse, path_folder_cl)
 
-        # im_dummy = cv2.imread(path_folder_cl + onlyfiles_cl[0], 0)
-
         predictions_path = predictions_paths[iFolder]
 
         # initialize class again?
@@ -44,14 +42,12 @@ def run_original_pipeline(model_name):
             # save percentages
 
             im_name = images_in_both[iSample]
-            output_file_name = predictions_path + '/' + im_name
-            image_path_cl = path_folder_cl + im_name
-            image_path_bse = path_folder_bse + im_name
-            check1 = os.path.isfile(image_path_cl)
-            check2 = os.path.isfile(image_path_bse)
+            image_path_bse, image_path_cl, output_file_name = get_file_names(im_name, path_folder_bse, path_folder_cl,
+                                                                             predictions_path)
 
-            if check1 == True and check2 == True:
-                predictions_smooth = predict_from_images(im_h, im_name, image_path_bse, image_path_cl, nb_classes, model)
+            if both_files_exist(image_path_bse, image_path_cl):
+                predictions_smooth = predict_from_images(im_h, im_name, image_path_bse, image_path_cl, nb_classes,
+                                                         model)
 
                 # Save &/ plot image
                 test_argmax = np.argmax(predictions_smooth, axis=2)
@@ -65,3 +61,14 @@ def run_original_pipeline(model_name):
         print('.csv-file saved!')
 
 
+def get_file_names(im_name, path_folder_bse, path_folder_cl, predictions_path):
+    output_file_name = predictions_path + '/' + im_name
+    image_path_cl = path_folder_cl + im_name
+    image_path_bse = path_folder_bse + im_name
+    return image_path_bse, image_path_cl, output_file_name
+
+
+def both_files_exist(image_path_bse, image_path_cl):
+    check1 = os.path.isfile(image_path_cl)
+    check2 = os.path.isfile(image_path_bse)
+    return check1 and check2
