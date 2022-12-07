@@ -10,7 +10,8 @@ from assesSEM.unet import get_unet_input
 #
 def get_input_method_for_predictor_and_model(predictor, model):
     #if predictor is instance of predict_img_with_smooth_windowing:
-        # input_method = get_unet_input
+        # if model is instance of unet with size 512:
+            # input_method = get_unet_input
     #else:
         # raise ValueError
 
