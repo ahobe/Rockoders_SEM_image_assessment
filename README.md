@@ -10,17 +10,11 @@ Delete these files before proceeding.
 
 ### Creating the conda environment: 
 ```bash
-conda env create -f Rockoders.yml
+conda env create -f assesSEM.yml
 ```
 
 ### Activate conda environment:
 ```bash
-conda activate Rockoders
+conda activate assesSEM
 ```
 
-### Usage of original submission
-```bash
-python run.py
-```
-
-You will then be prompted about the desired nr of images per dataset.
