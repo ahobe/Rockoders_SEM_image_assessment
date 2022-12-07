@@ -7,7 +7,7 @@ from assesSEM.get_user_input import get_folder_names, get_desired_nr_of_images_p
     get_common_image_nrs_from_both_image_types, get_names_for_image_type_folders
 from assesSEM.model_manipulation import build_and_load_existing_model
 from assesSEM.postprocessing import get_percentage_values_for_labels
-from assesSEM.predictors import predict_from_images
+from assesSEM.use_cases import predict_from_images
 
 
 def run_original_pipeline(model_name):
