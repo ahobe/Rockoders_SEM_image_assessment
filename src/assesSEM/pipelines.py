@@ -7,7 +7,7 @@ from assesSEM.get_user_input import get_folder_names, get_desired_nr_of_images_p
     get_common_image_nrs_from_both_image_types, get_names_for_image_type_folders
 from assesSEM.model_manipulation import build_and_load_existing_model
 from assesSEM.postprocessing import get_percentage_values_for_labels
-from assesSEM.use_cases import predict_from_images, use_case_predict_from_images, ImageMetaData
+from assesSEM.use_cases import predict_from_images, predict_from_images, ImageMetaData
 
 
 def run_original_pipeline(model_name):
@@ -53,9 +53,7 @@ def run_original_pipeline(model_name):
             image_meta_data.image_path_cl = image_path_cl
 
             if both_files_exist(image_path_bse, image_path_cl):
-                # predictions_smooth = predict_from_images(im_h, im_name, image_path_bse, image_path_cl, nb_classes,
-                #                                          model)
-                predictions_smooth = use_case_predict_from_images(model, image_meta_data)
+                predictions_smooth = predict_from_images(model, image_meta_data)
 
                 # Save &/ plot image
                 test_argmax = np.argmax(predictions_smooth, axis=2)
