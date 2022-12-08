@@ -29,7 +29,7 @@ def predict_from_images(model, image_meta_data, use_predictor=use_predictor_pred
 
 class ImageMetaData:
     def __init__(self, im_h=512, im_name=None, base_path=None, bse_path=None, cl_path=None, classes_nr=5):
-        self.image_height = im_h
+        self.image_height = im_h  # this is actually the height required by the model.
         self.image_name = im_name
         self.base_dir_path = base_path
         self.image_path_bse = bse_path
