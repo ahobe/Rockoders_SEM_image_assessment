@@ -13,9 +13,6 @@ from assesSEM.use_cases import predict_from_images, predict_from_images, ImageMe
 def run_original_pipeline(model_name):
     # initializing solver
     model, nb_classes, im_h = build_and_load_existing_model(name=model_name)
-    image_meta_data = ImageMetaData()
-    image_meta_data.nb_classes = nb_classes
-    image_meta_data.image_height = im_h
 
     # folder structure manipulation
     folder_names = get_folder_names()
@@ -45,12 +42,10 @@ def run_original_pipeline(model_name):
             # save percentages
 
             im_name = images_in_both[iSample]
-
             image_path_bse, image_path_cl, output_file_name = get_file_names(im_name, path_folder_bse, path_folder_cl,
                                                                              predictions_path)
-            image_meta_data.image_name = im_name
-            image_meta_data.image_path_bse = image_path_bse
-            image_meta_data.image_path_cl = image_path_cl
+            image_meta_data = ImageMetaData(classes_nr=nb_classes, im_h=im_h, im_name=im_name,
+                                            bse_path=image_path_bse, cl_path=image_path_cl)
 
             if both_files_exist(image_path_bse, image_path_cl):
                 predictions_for_all_labels = predict_from_images(model, image_meta_data)
