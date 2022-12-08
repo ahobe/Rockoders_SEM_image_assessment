@@ -6,5 +6,6 @@ setup(
     package_dir={"": "src"},
     package_data={
         'assesSEM/models': ['*.h5'],
+        'assesSEM/test_images': ['*.tiff'],
     }
 )

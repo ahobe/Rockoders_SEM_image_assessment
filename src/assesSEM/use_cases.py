@@ -1,7 +1,4 @@
-import time
-
-from assesSEM.smooth_tiled_predictions import predict_img_with_smooth_windowing
-from predictors import use_predictor_predict_img_with_smooth_windowing
+from assesSEM.predictors import use_predictor_predict_img_with_smooth_windowing
 from assesSEM.unet import get_unet_input
 
 # Use case should not know which solver it is using.
