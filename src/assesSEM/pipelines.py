@@ -53,18 +53,23 @@ def run_original_pipeline(model_name):
             image_meta_data.image_path_cl = image_path_cl
 
             if both_files_exist(image_path_bse, image_path_cl):
-                predictions_smooth = predict_from_images(model, image_meta_data)
+                predictions_for_all_labels = predict_from_images(model, image_meta_data)
+                predicted_image = get_maximum_likelihood_label_for_each_pixel(predictions_for_all_labels)
 
-                # Save &/ plot image
-                test_argmax = np.argmax(predictions_smooth, axis=2)
+                save_image(predicted_image, output_file_name)
 
-                save_image(test_argmax, output_file_name)
-
-                percentage_table = get_percentage_values_for_labels(iSample, im_name, percentage_table,
-                                                                    predictions_path, test_argmax)
+                percentage_table.loc[iSample] = get_percentage_values_for_labels(im_name,
+                                                                                 percentage_table.loc[iSample],
+                                                                                 predictions_path,
+                                                                                 predicted_image)
 
         percentage_table.to_csv(predictions_path + '/' + 'results_' + folder + '.csv', index=False)
         print('.csv-file saved!')
+
+
+def get_maximum_likelihood_label_for_each_pixel(predictions_for_all_labels):
+    test_argmax = np.argmax(predictions_for_all_labels, axis=2)
+    return test_argmax
 
 
 def get_file_names(im_name, path_folder_bse, path_folder_cl, predictions_path):
