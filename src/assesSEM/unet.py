@@ -41,7 +41,9 @@ def decoder_block(input, skip_features, num_filters):
 
 
 # Build Unet using the blocks
-def build_unet(input_shape, n_classes):
+def build_unet(input_shape, n_classes, name):
+    if name == 'default':
+        name = "model_mlo_512_512_2.h5"
     inputs = Input(input_shape)
 
     s1, p1 = encoder_block(inputs, 64)
@@ -65,7 +67,7 @@ def build_unet(input_shape, n_classes):
         d4)  # Change the activation based on n_classes
     # print(activation)
 
-    model = Model(inputs, outputs, name="U-Net")
+    model = Model(inputs, outputs, name=name)
     return model
 
 
@@ -90,15 +92,33 @@ def get_model_shape_and_classes(name='default'):
     return model_params.no_of_classes, input_shape
 
 
-def create_unet_input(bse_im, cl_im):
-    x = np.zeros([cl_im.shape[0], cl_im.shape[1], 2])
+def create_unet_input(bse_im, cl_im, mm_im=None):
+    if mm_im is not None:
+        x = np.zeros([cl_im.shape[0], cl_im.shape[1], 3])
+    else:
+        x = np.zeros([cl_im.shape[0], cl_im.shape[1], 2])
     x[:, :, 0] = cl_im
     x[:, :, 1] = bse_im
+    if mm_im is not None:
+        x[:, :, 2] = mm_im
     return x
 
 
-def get_unet_input(image_path_bse, image_path_cl):
-    cl_im = read_and_normalize_image(image_path_cl)
-    bse_im = read_and_normalize_image(image_path_bse)
-    unet_input = create_unet_input(bse_im, cl_im)
+def get_unet_input(model_name, image_metadata):
+    if model_name == "model_mlo_512_512_unshifted_mm.h5" :
+        image_path_mm = image_metadata.image_path_mm
+    elif model_name == 'default' or model_name == "model_mlo_512_512_2.h5" or \
+            model_name == "model_mlo_512_512_unshifted.h5":
+        image_path_mm = None
+    else:
+        raise ValueError(str(model_name))
+    cl_im = read_and_normalize_image(image_metadata.image_path_cl)
+    bse_im = read_and_normalize_image(image_metadata.image_path_bse)
+
+    if image_path_mm:  # not None
+        mm_im = read_and_normalize_image(image_path_mm)
+        unet_input = create_unet_input(bse_im, cl_im, mm_im=mm_im)
+    else:
+        unet_input = create_unet_input(bse_im, cl_im)
+
     return unet_input

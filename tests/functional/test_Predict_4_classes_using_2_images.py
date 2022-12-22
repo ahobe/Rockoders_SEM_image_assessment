@@ -1,5 +1,5 @@
 import numpy as np
-from pytest_bdd import scenario, given, when, then
+from pytest_bdd import scenario, given, when, then, parsers
 
 from importlib.resources import files
 
@@ -23,9 +23,15 @@ def image_meta_data():
     return image_meta_data
 
 
-@given("I have a model", target_fixture="model")
-def model():
-    model, _ = build_and_load_existing_model(name="model_mlo_512_512_2.h5")
+@given(parsers.parse("I have a model \"{model_name}\""), target_fixture="model")
+def model(model_name):
+    if model_name == 'default':
+        name = "model_mlo_512_512_2.h5"
+    elif model_name == "unshifted_mm":
+        name = "model_mlo_512_512_unshifted_mm.h5"
+    else:
+        raise ValueError
+    model, _ = build_and_load_existing_model(name=name)
     return model
 
 
@@ -60,3 +66,24 @@ def step_impl():
 @then("I get percentage values for all 4 labels")
 def step_impl():
     raise NotImplementedError(u'STEP: Then I get percentage values for all 4 labels')
+
+
+@given("I have a BSE image and a CL image and an MM image")
+def step_impl():
+    raise NotImplementedError(u'STEP: Given I have a BSE image and a CL image and an MM image')
+
+
+@scenario("../acceptance/Predict_4_classes_using_2_images.feature", "Predicted image from BSE and CL and MM")
+def test_predict_4_classes_using_3_images():
+    pass
+
+@given("I have a BSE image and a CL image and an MM image", target_fixture="image_meta_data")
+def image_meta_data():
+    im_path_BSE = files('assesSEM.test_images').joinpath("BSE_image6_18_1.tif")
+    im_path_CL = files('assesSEM.test_images').joinpath("CL_image6_18_1.tif")
+    im_path_MM = files('assesSEM.test_images').joinpath("MM_image6_18_1.tif")
+    image_meta_data = ImageMetaData(im_name="image6_18_1_delete_after_adding_data",
+                                    bse_path=str(im_path_BSE), cl_path=str(im_path_CL),
+                                    mm_path=str(im_path_MM))
+    return image_meta_data
+

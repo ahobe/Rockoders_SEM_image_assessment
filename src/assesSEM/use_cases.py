@@ -17,9 +17,9 @@ def get_input_method_for_predictor_and_model(predictor, model):
     return 0
 
 # predict_image_with_slicing
-def predict_from_images(model, image_meta_data, use_predictor=use_predictor_predict_img_with_smooth_windowing,
+def predict_from_images(model, image_meta_data, use_predictor=predict_image_with_slicing,
                                  input_method=get_unet_input):
-    predictor_input = input_method(image_meta_data.image_path_bse, image_meta_data.image_path_cl)
+    predictor_input = input_method(model.name, image_meta_data)
     predictions_for_each_label = use_predictor(predictor_input, image_meta_data, model)
     return predictions_for_each_label
 

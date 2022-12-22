@@ -66,7 +66,7 @@ def get_ok_for_overwrite(folder_name):
 def get_desired_nr_of_images_per_folder(names):
     nr_per_folder = []
     for name in names:
-        folder, _ = get_names_for_image_type_folders(name)
+        folder, _, _ = get_names_for_image_type_folders(name)
         max_nr_of_images = int(get_nr_of_images_in_folder(folder))
         value = input(f"Please enter desired # of images to load for {name} (max {max_nr_of_images}):")
         try:
@@ -93,20 +93,28 @@ def get_names_of_images_in_folder(folder_path):
     return image_names
 
 
-def get_common_image_nrs_from_both_image_types(path_folder_bse, path_folder_cl):
+def get_common_image_nrs_from_image_types(path_folder_bse, path_folder_cl, path_folder_mm=None):
     onlyfiles_cl = get_names_of_images_in_folder(path_folder_cl)
-    onlyfiles_bse = get_names_of_images_in_folder(path_folder_bse)
     print('Found', len(onlyfiles_cl), 'files in CL folder:')
+    onlyfiles_bse = get_names_of_images_in_folder(path_folder_bse)
     print('Found', len(onlyfiles_bse), 'files in BSE folder:')
-    images_available_in_both = []
+
+    if path_folder_mm: # not None
+        onlyfiles_mm = get_names_of_images_in_folder(path_folder_mm)
+        print('Found', len(onlyfiles_mm), 'files in mm folder:')
+
+    common_images = []
     for file in onlyfiles_cl:
         if isfile(join(path_folder_bse, file)):
-            images_available_in_both.append(file)
-    return images_available_in_both
+            if path_folder_mm and not isfile(join(path_folder_mm, file)):
+                continue
+            common_images.append(file)
+    return common_images
 
 
 def get_names_for_image_type_folders(folder):
     print('Opening folder', folder, '..')
     path_folder_cl = folder + '/CL/'
     path_folder_bse = folder + '/BSE/'
-    return path_folder_bse, path_folder_cl
+    path_folder_mm = folder + '/MM/'
+    return path_folder_bse, path_folder_cl, path_folder_mm
