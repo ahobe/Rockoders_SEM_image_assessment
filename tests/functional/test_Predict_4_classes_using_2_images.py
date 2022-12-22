@@ -25,7 +25,7 @@ def image_meta_data():
 
 @given("I have a model", target_fixture="model")
 def model():
-    model, _, _ = build_and_load_existing_model(name="model_mlo_512_512_2.h5")
+    model, _ = build_and_load_existing_model(name="model_mlo_512_512_2.h5")
     return model
 
 

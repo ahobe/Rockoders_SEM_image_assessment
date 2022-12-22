@@ -70,24 +70,24 @@ def build_unet(input_shape, n_classes):
 
 
 class ModelAttributes:
-    def __init__(self):
-        self.patch_height = 512
-        self.patch_width = 512
-        self.no_of_channels = 2
-        self.no_of_classes = 5
+    def __init__(self, p_h=512, p_w=512, n_channels=2, nb_classes=5):
+        self.patch_height = p_h
+        self.patch_width = p_w
+        self.no_of_channels = n_channels
+        self.no_of_classes = nb_classes
 
 
 def get_model_shape_and_classes(name='default'):
-    if name == 'default':
+    if name == 'default' or name == "model_mlo_512_512_2.h5" or name == "model_mlo_512_512_unshifted.h5":
         model_params = ModelAttributes()
-        patch_h = model_params.patch_height  # height
-        patch_w = model_params.patch_width  # width
-        n_ch = model_params.no_of_channels  # no of channels (1 for BSE and 1 for CL)
-        nb_classes = model_params.no_of_classes
-        input_shape = (patch_h, patch_w, n_ch)
+    elif name == "model_mlo_512_512_unshifted_mm.h5":
+        model_params = ModelAttributes(n_channels=3)
     else:
         return ValueError
-    return nb_classes, input_shape, patch_h
+
+    input_shape = (model_params.patch_height, model_params.patch_width, model_params.no_of_channels)
+
+    return model_params.no_of_classes, input_shape
 
 
 def create_unet_input(bse_im, cl_im):
