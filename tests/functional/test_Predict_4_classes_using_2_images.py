@@ -5,6 +5,7 @@ from importlib.resources import files
 
 from assesSEM.model_manipulation import build_and_load_existing_model
 from assesSEM.postprocessing import get_maximum_likelihood_label_for_each_pixel
+from assesSEM.predictors import predict_image_with_slicing
 from assesSEM.use_cases import ImageMetaData, predict_from_images
 
 
@@ -30,7 +31,8 @@ def model():
 
 @when('I use "predict_from_images" and "get_maximum_likelihood_label_for_each_pixel"', target_fixture="predicted_image")
 def predicted_image(model, image_meta_data):
-    predictions_for_all_labels = predict_from_images(model, image_meta_data)
+    # predictions_for_all_labels = predict_from_images(model, image_meta_data)
+    predictions_for_all_labels = predict_from_images(model, image_meta_data, use_predictor=predict_image_with_slicing)
     predicted_image = get_maximum_likelihood_label_for_each_pixel(predictions_for_all_labels)
 
     return predicted_image

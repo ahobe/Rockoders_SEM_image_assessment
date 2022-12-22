@@ -8,6 +8,12 @@ from assesSEM.plotting import get_cmap
 
 
 def save_image(data, file_name, cmap_name='hackathon'):
+    fig, ax, height = plot_prediction(data, cmap_name)
+    plt.savefig(file_name, dpi=height)
+    plt.close()
+
+
+def plot_prediction(data, cmap_name='hackathon'):
     if cmap_name == 'hackathon':
         cmap = get_cmap()
     else:
@@ -15,16 +21,13 @@ def save_image(data, file_name, cmap_name='hackathon'):
     sizes = np.shape(data)
     height = float(sizes[0])
     width = float(sizes[1])
-
     fig = plt.figure()
     fig.set_size_inches(width / height, 1, forward=False)
     ax = plt.Axes(fig, [0., 0., 1., 1.])
     ax.set_axis_off()
     fig.add_axes(ax)
-
     ax.imshow(data, cmap=cmap, vmin=-1, vmax=4)
-    plt.savefig(file_name, dpi=height)
-    plt.close()
+    return fig, ax, height
 
 
 def create_image_predictions_folders(folder_names):

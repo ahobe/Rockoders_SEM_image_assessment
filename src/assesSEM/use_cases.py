@@ -1,4 +1,4 @@
-from assesSEM.predictors import use_predictor_predict_img_with_smooth_windowing
+from assesSEM.predictors import use_predictor_predict_img_with_smooth_windowing, predict_image_with_slicing
 from assesSEM.unet import get_unet_input
 
 # Use case should not know which solver it is using.
@@ -16,7 +16,7 @@ def get_input_method_for_predictor_and_model(predictor, model):
 
     return 0
 
-
+# predict_image_with_slicing
 def predict_from_images(model, image_meta_data, use_predictor=use_predictor_predict_img_with_smooth_windowing,
                                  input_method=get_unet_input):
     predictor_input = input_method(image_meta_data.image_path_bse, image_meta_data.image_path_cl)
