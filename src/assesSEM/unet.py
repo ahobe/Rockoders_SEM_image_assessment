@@ -71,8 +71,8 @@ def build_unet(input_shape, n_classes):
 
 class ModelAttributes:
     def __init__(self):
-        self.image_height = 512
-        self.image_width = 512
+        self.patch_height = 512
+        self.patch_width = 512
         self.no_of_channels = 2
         self.no_of_classes = 5
 
@@ -80,14 +80,14 @@ class ModelAttributes:
 def get_model_shape_and_classes(name='default'):
     if name == 'default':
         model_params = ModelAttributes()
-        im_h = model_params.image_height  # height
-        im_w = model_params.image_width  # width
-        im_ch = model_params.no_of_channels  # no of channels (1 for BSE and 1 for CL)
+        patch_h = model_params.patch_height  # height
+        patch_w = model_params.patch_width  # width
+        n_ch = model_params.no_of_channels  # no of channels (1 for BSE and 1 for CL)
         nb_classes = model_params.no_of_classes
-        input_shape = (im_h, im_w, im_ch)
+        input_shape = (patch_h, patch_w, n_ch)
     else:
         return ValueError
-    return nb_classes, input_shape, im_h
+    return nb_classes, input_shape, patch_h
 
 
 def create_unet_input(bse_im, cl_im):

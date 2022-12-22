@@ -18,7 +18,7 @@ def test_predict_4_classes_using_2_images():
 def image_meta_data():
     im_path_BSE = files('assesSEM.test_images').joinpath("BSE_image6_18_1.tif")
     im_path_CL = files('assesSEM.test_images').joinpath("CL_image6_18_1.tif")
-    image_meta_data = ImageMetaData(classes_nr=5, im_h=512, im_name="image6_18_1_delete_after_adding_data",
+    image_meta_data = ImageMetaData(im_name="image6_18_1_delete_after_adding_data",
                                     bse_path=str(im_path_BSE), cl_path=str(im_path_CL))
     return image_meta_data
 
