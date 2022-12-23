@@ -8,6 +8,12 @@ from assesSEM.plotting import get_cmap
 
 
 def save_image(data, file_name, cmap_name='hackathon'):
+    fig, ax, height = plot_prediction(data, cmap_name)
+    plt.savefig(file_name, dpi=height)
+    plt.close()
+
+
+def plot_prediction(data, cmap_name='hackathon'):
     if cmap_name == 'hackathon':
         cmap = get_cmap()
     else:
@@ -15,16 +21,13 @@ def save_image(data, file_name, cmap_name='hackathon'):
     sizes = np.shape(data)
     height = float(sizes[0])
     width = float(sizes[1])
-
     fig = plt.figure()
     fig.set_size_inches(width / height, 1, forward=False)
     ax = plt.Axes(fig, [0., 0., 1., 1.])
     ax.set_axis_off()
     fig.add_axes(ax)
-
     ax.imshow(data, cmap=cmap, vmin=-1, vmax=4)
-    plt.savefig(file_name, dpi=height)
-    plt.close()
+    return fig, ax, height
 
 
 def create_image_predictions_folders(folder_names):
@@ -51,11 +54,13 @@ def read_and_normalize_image(image_path):
     return im
 
 
-def get_file_names(im_name, path_folder_bse, path_folder_cl, predictions_path):
+def get_file_names(im_name, path_folder_bse, path_folder_cl, predictions_path, path_folder_mm=None):
     output_file_name = predictions_path + '/' + im_name
-    image_path_cl = path_folder_cl + im_name
-    image_path_bse = path_folder_bse + im_name
-    return image_path_bse, image_path_cl, output_file_name
+    image_paths = {'image_path_cl': path_folder_cl + im_name, 'image_path_bse': path_folder_bse + im_name}
+    if path_folder_mm:  # not None
+        image_paths['image_path_mm'] = path_folder_mm + im_name
+
+    return image_paths, output_file_name
 
 
 def both_files_exist(image_path_bse, image_path_cl):
