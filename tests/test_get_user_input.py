@@ -3,7 +3,8 @@ from io import StringIO
 from unittest.mock import patch
 import pytest
 
-from assesSEM.get_user_input import get_ok_for_overwrite, get_folder_names, get_desired_nr_of_images_per_folder
+from assesSEM.get_user_input import get_ok_for_overwrite, get_folder_names, get_desired_nr_of_images_per_folder, \
+    get_model_name_from_user
 
 
 @pytest.mark.parametrize("response, expected", [
@@ -91,6 +92,27 @@ def test_get_desired_nr_of_images_per_folder_too_many():
         with patch('assesSEM.get_user_input.get_nr_of_images_in_folder', return_value='2'):
             nr_per_folder = get_desired_nr_of_images_per_folder(folder_names)
             assert nr_per_folder == [2]
+
+@pytest.mark.parametrize("response, expected", [
+    ("1", "model_mlo_512_512_2.h5"),
+    ("2", "model_mlo_512_512_unshifted.h5"),
+    ("3", "model_mlo_512_512_unshifted_mm.h5"),
+
+])
+def test_get_model_name_from_user(response, expected):
+    with patch('builtins.input', return_value=response):
+        model_name = get_model_name_from_user()
+        assert model_name == expected
+
+
+def test_get_model_name_from_user_raises():
+    with pytest.raises(ValueError) as e:
+        with patch('builtins.input', return_value="..5.."):
+            get_model_name_from_user()
+    assert e.type == ValueError
+
+
+
 
 
 if __name__ == '__main__':

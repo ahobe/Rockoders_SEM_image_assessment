@@ -118,3 +118,21 @@ def get_names_for_image_type_folders(folder):
     path_folder_bse = folder + '/BSE/'
     path_folder_mm = folder + '/MM/'
     return path_folder_bse, path_folder_cl, path_folder_mm
+
+
+def get_model_name_from_user():
+    answer = input("Please choose model: \n" +
+                   "1: Original submission model \n" +
+                   "2: New model using 2 unaligned images (BSE & CL) \n" +
+                   "3: New model using all 3 images (BSE & CL & MM)\n"
+                   )
+    if answer == "1":
+        model_name = "model_mlo_512_512_2.h5"
+    elif answer == "2":
+        model_name = "model_mlo_512_512_unshifted.h5"
+    elif answer == "3":
+        model_name = "model_mlo_512_512_unshifted_mm.h5"
+    else:
+        raise ValueError
+
+    return model_name

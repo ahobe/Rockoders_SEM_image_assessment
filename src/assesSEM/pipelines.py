@@ -4,13 +4,15 @@ from assesSEM.IO import (create_image_predictions_folders,
 from assesSEM.get_user_input import (get_folder_names,
                                      get_desired_nr_of_images_per_folder,
                                      get_names_for_image_type_folders,
-                                     get_common_image_nrs_from_image_types)
+                                     get_common_image_nrs_from_image_types, get_model_name_from_user)
 from assesSEM.model_manipulation import build_and_load_existing_model
 from assesSEM.postprocessing import get_percentage_values_for_labels, get_maximum_likelihood_label_for_each_pixel
 from assesSEM.use_cases import predict_from_images, ImageMetaData
 
 
-def run_original_pipeline(model_name):
+def run_original_pipeline(model_name=None):
+    if model_name is None:
+        model_name = get_model_name_from_user()
     model, nb_classes = build_and_load_existing_model(name=model_name)
 
     folder_names = get_folder_names()
