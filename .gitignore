@@ -12,3 +12,4 @@ tests/__pycache__/
 .coverage
 tests/functional/__pycache__/
 tests/unit/__pycache__/
+src/assesSEM/predicting/__pycache__/
