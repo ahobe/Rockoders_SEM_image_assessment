@@ -26,6 +26,11 @@ conda activate assesSEM
 pip install -e .
 ```
 
+### Test if the installation worked
+```bash
+pytest
+```
+
 ### Usage in the bottom of the dataset folder
 ```bash
 python run.py
