@@ -4,7 +4,14 @@ Feature: Predict_4_classes_using_2_images
 
   Scenario: Predicted image from BSE and CL
     Given I have a BSE image and a CL image
-    And I have a model
+    And I have a model "default"
+    When I use "predict_from_images" and "get_maximum_likelihood_label_for_each_pixel"
+    Then I get a predicted image
+    And the predicted image has 4 classes
+
+  Scenario: Predicted image from BSE and CL and MM
+    Given I have a BSE image and a CL image and an MM image
+    And I have a model "unshifted_mm"
     When I use "predict_from_images" and "get_maximum_likelihood_label_for_each_pixel"
     Then I get a predicted image
     And the predicted image has 4 classes
