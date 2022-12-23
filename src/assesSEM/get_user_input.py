@@ -3,6 +3,8 @@ import sys
 import glob
 from os.path import isfile, join
 
+from assesSEM.predictors import use_predictor_predict_img_with_smooth_windowing, predict_image_with_slicing
+
 
 def get_folder_names():
     value = input("Please choose folders:\n" +
@@ -26,6 +28,7 @@ def get_folder_names():
     elif value == "5":
         names = ['dataset4B']
     else:
+        print('Aborting...')
         raise ValueError
     return names
 
@@ -133,6 +136,21 @@ def get_model_name_from_user():
     elif answer == "3":
         model_name = "model_mlo_512_512_unshifted_mm.h5"
     else:
+        print('Aborting...')
         raise ValueError
 
     return model_name
+
+
+def get_predictor_name_from_user():
+    answer = input("Please, choose predictor: \n" +
+                   "1: Original submission (~220s per image on CPU, 5s on GPU)\n" +
+                   "2: Fast patching of images (5-14 s per image on CPU)")
+    if answer == "1":
+        predictor = use_predictor_predict_img_with_smooth_windowing
+    elif answer == "2":
+        predictor = predict_image_with_slicing
+    else:
+        print('Aborting...')
+        raise ValueError
+    return predictor

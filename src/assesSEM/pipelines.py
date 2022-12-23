@@ -4,15 +4,18 @@ from assesSEM.IO import (create_image_predictions_folders,
 from assesSEM.get_user_input import (get_folder_names,
                                      get_desired_nr_of_images_per_folder,
                                      get_names_for_image_type_folders,
-                                     get_common_image_nrs_from_image_types, get_model_name_from_user)
+                                     get_common_image_nrs_from_image_types, get_model_name_from_user,
+                                     get_predictor_name_from_user)
 from assesSEM.model_manipulation import build_and_load_existing_model
 from assesSEM.postprocessing import get_percentage_values_for_labels, get_maximum_likelihood_label_for_each_pixel
 from assesSEM.use_cases import predict_from_images, ImageMetaData
 
 
-def run_original_pipeline(model_name=None):
+def run_original_pipeline(model_name=None, predictor_type=None):
     if model_name is None:
         model_name = get_model_name_from_user()
+    if predictor_type is None:
+        predictor = get_predictor_name_from_user()
     model, nb_classes = build_and_load_existing_model(name=model_name)
 
     folder_names = get_folder_names()
@@ -53,7 +56,8 @@ def run_original_pipeline(model_name=None):
                 if model_name == "model_mlo_512_512_unshifted_mm.h5" and \
                         not both_files_exist(image_paths['image_path_bse'], image_paths['image_path_mm']):
                     continue
-                predictions_for_all_labels = predict_from_images(model, image_meta_data)
+                predictions_for_all_labels = predict_from_images(model, image_meta_data,
+                                                                 use_predictor=predictor)
                 predicted_image = get_maximum_likelihood_label_for_each_pixel(predictions_for_all_labels)
 
                 save_image(predicted_image, output_file_name)

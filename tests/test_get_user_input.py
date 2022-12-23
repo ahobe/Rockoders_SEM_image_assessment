@@ -4,7 +4,8 @@ from unittest.mock import patch
 import pytest
 
 from assesSEM.get_user_input import get_ok_for_overwrite, get_folder_names, get_desired_nr_of_images_per_folder, \
-    get_model_name_from_user
+    get_model_name_from_user, get_predictor_name_from_user
+from assesSEM.predictors import use_predictor_predict_img_with_smooth_windowing, predict_image_with_slicing
 
 
 @pytest.mark.parametrize("response, expected", [
@@ -93,6 +94,7 @@ def test_get_desired_nr_of_images_per_folder_too_many():
             nr_per_folder = get_desired_nr_of_images_per_folder(folder_names)
             assert nr_per_folder == [2]
 
+
 @pytest.mark.parametrize("response, expected", [
     ("1", "model_mlo_512_512_2.h5"),
     ("2", "model_mlo_512_512_unshifted.h5"),
@@ -112,7 +114,21 @@ def test_get_model_name_from_user_raises():
     assert e.type == ValueError
 
 
+@pytest.mark.parametrize("response, expected", [
+    ("1", use_predictor_predict_img_with_smooth_windowing),
+    ("2", predict_image_with_slicing),
+])
+def test_get_predictor_name_from_user(response, expected):
+    with patch('builtins.input', return_value=response):
+        predictor = get_predictor_name_from_user()
+        assert predictor == expected
 
+
+def test_get_predictor_name_from_user_raises():
+    with pytest.raises(ValueError) as e:
+        with patch('builtins.input', return_value="..5.."):
+            get_predictor_name_from_user()
+    assert e.type == ValueError
 
 
 if __name__ == '__main__':
