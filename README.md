@@ -25,3 +25,10 @@ conda activate assesSEM
 ```bash
 pip install -e .
 ```
+
+### Usage in the bottom of the dataset folder
+```bash
+python run.py
+```
+
+You will then be prompted about the desired nr of images per dataset.
