@@ -31,7 +31,7 @@ def model(model_name):
         name = "model_mlo_512_512_unshifted_mm.h5"
     else:
         raise ValueError
-    model, _ = build_and_load_existing_model(name=name)
+    model = build_and_load_existing_model(name=name)
     return model
 
 
