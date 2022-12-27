@@ -3,11 +3,6 @@ from io import StringIO
 from unittest.mock import patch
 import pytest
 
-<<<<<<< HEAD:tests/test_get_user_input.py
-
-from assesSEM.get_user_input import get_ok_for_overwrite, get_folder_names, get_desired_nr_of_images_per_folder, \
-    get_model_name_from_user, get_predictor_name_from_user, deal_with_folder_availability
-=======
 from assesSEM.get_user_input import (get_ok_for_overwrite,
                                      get_folder_names,
                                      get_desired_nr_of_images_per_folder,
@@ -15,7 +10,6 @@ from assesSEM.get_user_input import (get_ok_for_overwrite,
                                      get_predictor_name_from_user,
                                      deal_with_folder_availability
                                      )
->>>>>>> e8ca422480342b686b4fdc1703cee3ce92ed10df:tests/unit/test_get_user_input.py
 from assesSEM.predictors import use_predictor_predict_img_with_smooth_windowing, predict_image_with_slicing
 
 
