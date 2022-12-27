@@ -16,4 +16,4 @@ def build_and_load_existing_model(name="model_mlo_512_512_2.h5"):
     current_model.nb_classes = nb_classes
     current_model.no_channels = input_shape[2]
 
-    return current_model, nb_classes
+    return current_model

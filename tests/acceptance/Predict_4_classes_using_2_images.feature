@@ -1,4 +1,4 @@
-# Created by ah at 08.12.22
+# Created by aho at 08.12.22
 Feature: Predict_4_classes_using_2_images
   # Enter feature description here
 
@@ -16,7 +16,7 @@ Feature: Predict_4_classes_using_2_images
     Then I get a predicted image
     And the predicted image has 4 classes
 
-#    Scenario: Reconstruct full image after using nxn unet
+##   Scenario: Reconstruct full image after using nxn unet
 #      Given I have a Unet
 #      And I have a BSE image and a CL image
 #      Then when I use

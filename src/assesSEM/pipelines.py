@@ -16,7 +16,7 @@ def run_original_pipeline(model_name=None, predictor_type=None):
         model_name = get_model_name_from_user()
     if predictor_type is None:
         predictor = get_predictor_name_from_user()
-    model, nb_classes = build_and_load_existing_model(name=model_name)
+    model = build_and_load_existing_model(name=model_name)
 
     folder_names = get_folder_names()
     nr_of_images_per_folder = get_desired_nr_of_images_per_folder(folder_names)

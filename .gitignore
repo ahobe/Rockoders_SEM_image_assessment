@@ -13,3 +13,5 @@ tests/__pycache__/
 tests/functional/__pycache__/
 tests/unit/__pycache__/
 src/assesSEM/predicting/__pycache__/
+Data/dataset1/MM/*
+Data/dataset1/CL_segmented/*.csv 
