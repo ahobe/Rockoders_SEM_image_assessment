@@ -135,10 +135,6 @@ def test_get_predictor_name_from_user_raises():
             get_predictor_name_from_user()
     assert e.type == ValueError
 
-def test_deal_with_folder_availability():
-    path = "."
-    result = deal_with_folder_availability(path)
-    assert result == "?"
 
 def test_deal_with_folder_availability_nonexistent():
     with patch('os.mkdir', return_value=1):
