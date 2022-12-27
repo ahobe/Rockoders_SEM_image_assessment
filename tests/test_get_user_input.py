@@ -3,8 +3,9 @@ from io import StringIO
 from unittest.mock import patch
 import pytest
 
+
 from assesSEM.get_user_input import get_ok_for_overwrite, get_folder_names, get_desired_nr_of_images_per_folder, \
-    get_model_name_from_user, get_predictor_name_from_user
+    get_model_name_from_user, get_predictor_name_from_user, deal_with_folder_availability
 from assesSEM.predictors import use_predictor_predict_img_with_smooth_windowing, predict_image_with_slicing
 
 
@@ -130,6 +131,10 @@ def test_get_predictor_name_from_user_raises():
             get_predictor_name_from_user()
     assert e.type == ValueError
 
+def test_deal_with_folder_availability():
+    path = "."
+    result = deal_with_folder_availability(path)
+    assert result == "?"
 
 if __name__ == '__main__':
     unittest.main()
