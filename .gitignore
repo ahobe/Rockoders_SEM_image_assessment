@@ -10,7 +10,7 @@ src/assesSEM.egg-info/*
 src/assesSEM/__pycache__/
 tests/__pycache__/
 .coverage
-tests/functional/__pycache__/
+tests/acceptance/__pycache__/
 tests/unit/__pycache__/
 src/assesSEM/predicting/__pycache__/
 Data/dataset1/MM/*
