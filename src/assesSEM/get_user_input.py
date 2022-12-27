@@ -38,11 +38,7 @@ def deal_with_folder_availability(path):
         os.mkdir(path)
         empty_folder = True
     else:
-        files_in_dir = os.listdir(path)
-        if len(files_in_dir) == 0:
-            empty_folder = True
-        else:
-            empty_folder = False
+        empty_folder = is_empty_folder(path)
 
     overwrite_ok = False
     if not empty_folder:
@@ -51,6 +47,15 @@ def deal_with_folder_availability(path):
     if overwrite_ok or empty_folder:  # either or both True
         allowed_to_continue = True
         return allowed_to_continue
+
+
+def is_empty_folder(path):
+    files_in_dir = os.listdir(path)
+    if len(files_in_dir) == 0:
+        empty_folder = True
+    else:
+        empty_folder = False
+    return empty_folder
 
 
 def get_ok_for_overwrite(folder_name):

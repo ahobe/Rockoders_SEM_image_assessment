@@ -3,8 +3,13 @@ from io import StringIO
 from unittest.mock import patch
 import pytest
 
-from assesSEM.get_user_input import get_ok_for_overwrite, get_folder_names, get_desired_nr_of_images_per_folder, \
-    get_model_name_from_user, get_predictor_name_from_user
+from assesSEM.get_user_input import (get_ok_for_overwrite,
+                                     get_folder_names,
+                                     get_desired_nr_of_images_per_folder,
+                                     get_model_name_from_user,
+                                     get_predictor_name_from_user,
+                                     deal_with_folder_availability
+                                     )
 from assesSEM.predictors import use_predictor_predict_img_with_smooth_windowing, predict_image_with_slicing
 
 
@@ -129,6 +134,26 @@ def test_get_predictor_name_from_user_raises():
         with patch('builtins.input', return_value="..5.."):
             get_predictor_name_from_user()
     assert e.type == ValueError
+
+
+def test_deal_with_folder_availability_nonexistent():
+    with patch('os.mkdir', return_value=1):
+        result = deal_with_folder_availability("../tmp")
+    assert result == True
+
+
+def test_deal_with_folder_availability_existent_empty():
+    with patch('os.listdir', return_value=[]):
+        result = deal_with_folder_availability("..")
+    assert result == True
+
+
+def test_deal_with_folder_availability_raises():
+    with pytest.raises(SystemExit) as e:
+        with patch('builtins.input', return_value="N"):
+            deal_with_folder_availability("..")
+    assert e.type == SystemExit
+    assert e.value.code is None
 
 
 if __name__ == '__main__':
