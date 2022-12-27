@@ -9,7 +9,7 @@ from assesSEM.predictors import predict_image_with_slicing
 from assesSEM.use_cases import ImageMetaData, predict_from_images
 
 
-@scenario("../acceptance/Predict_4_classes_using_2_images.feature", "Predicted image from BSE and CL")
+@scenario("../features/Predict_4_classes_using_2_images.feature", "Predicted image from BSE and CL")
 def test_predict_4_classes_using_2_images():
     pass
 
@@ -73,9 +73,10 @@ def step_impl():
     raise NotImplementedError(u'STEP: Given I have a BSE image and a CL image and an MM image')
 
 
-@scenario("../acceptance/Predict_4_classes_using_2_images.feature", "Predicted image from BSE and CL and MM")
+@scenario("../features/Predict_4_classes_using_2_images.feature", "Predicted image from BSE and CL and MM")
 def test_predict_4_classes_using_3_images():
     pass
+
 
 @given("I have a BSE image and a CL image and an MM image", target_fixture="image_meta_data")
 def image_meta_data():
