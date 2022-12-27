@@ -4,6 +4,9 @@
 Cleaned version of the second place winning code for the SPE Europe Energy GeoHackathon focused on predicting Geothermal reservoir quality from SEM images.
 https://www.spehackathon-eu.com/
 
+# What this project do
+This project was part of the code submmited to the 2022 SPE Geothermal Hackathon, the project is used for automatically characterize and quantify Geothermal Fields. The model clasiffieds minerals and pore spaces in thin sections using the input of backscatter electrons (BSE), cathodoluminescence (CL) microscopy and mineral-map images
+
 ### Dataset location:
 https://dataverse.geus.dk/dataset.xhtml?persistentId=doi:10.22008/FK2/5TWAZK
 
