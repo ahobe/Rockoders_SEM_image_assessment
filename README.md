@@ -5,7 +5,7 @@ Cleaned version of the second place winning code for the SPE Europe Energy GeoHa
 https://www.spehackathon-eu.com/
 
 ## What this project do
-This project was part of the code submmited to the 2022 SPE Geothermal Hackathon, the project is used for automatically characterize and quantify Geothermal Fields. The model clasiffieds minerals and pore spaces in thin sections using the input of backscatter electrons (BSE), cathodoluminescence (CL)  and mineral-map microscopy images
+This project was part of the code submmited to the 2022 SPE Geothermal Hackathon, the project is used for automatically characterize and quantify Geothermal Fields. The model classifieds minerals and pore spaces in thin sections using the input of backscatter electrons (BSE), cathodoluminescence (CL)  and mineral-map microscopy images
 
 ### Dataset location:
 https://dataverse.geus.dk/dataset.xhtml?persistentId=doi:10.22008/FK2/5TWAZK
