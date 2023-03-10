@@ -15,3 +15,6 @@ tests/unit/__pycache__/
 src/assesSEM/predicting/__pycache__/
 Data/dataset1/MM/*
 Data/dataset1/CL_segmented/*.csv 
+src/assesSEM/models/model_mlo_512_512_2.h5
+src/assesSEM/models/model_mlo_512_512_unshifted.h5
+src/assesSEM/models/model_mlo_512_512_unshifted_mm.h5

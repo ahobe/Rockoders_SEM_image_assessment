@@ -14,6 +14,10 @@ This dataset needs to be added into the existing folders.
 Inside each folder is a dummy tiff file, which git requires to show the folders.
 Delete these files before proceeding.
 
+### Downloading the required ML models:
+The models can be found [here](https://drive.google.com/drive/folders/1-hV6jhjIMoUTvTnvGypGklVqeicIiAEe?usp=sharing).
+These models need to be added to *src/assesSEM/models/* for the methods to work. 
+
 ### Creating the conda environment: 
 ```bash
 conda env create -f assesSEM.yml
